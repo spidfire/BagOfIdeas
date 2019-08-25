@@ -1,0 +1,23 @@
+{
+    "name": "spidfire/bagofideas",
+    "license": "MIT",
+    "require": {
+        "php": "^7.2",
+        "psr/log": "^1.0.1",
+        "propel/propel": "~2.0@dev",
+        "twig/twig": "^2.11",
+        "filp/whoops": "^2.4",
+        "ext-gd": "*"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "BagOfIdeas\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.2-dev"
+        }
+    }
+}

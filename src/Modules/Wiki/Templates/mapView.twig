@@ -1,0 +1,135 @@
+<div class="row no-gutters align-items-center">
+    <div class="col">
+        <a href="{{ EXT_ROOT }}wiki/">Back</a>
+        <div id="mapid"></div>
+    </div>
+
+</div>
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin=""/>
+
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+            integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+            crossorigin=""></script>
+
+
+{% include 'mapJavascript.twig' %}
+
+
+    <script>
+        var map = L.map('mapid', {
+            zoomDelta: 0.25,
+            wheelPxPerZoomLevel: 100,
+                zoomSnap: 0
+        }).setView([{{ image.y / 2 }}, 0], 4);
+        var imageUrl = '{{ image.url }}',
+            imageBounds = [[0, 0], [{{ image.y}}, {{ image.x }}]];
+        L.imageOverlay(imageUrl, imageBounds).addTo(map);
+
+        map.panTo(new L.LatLng({{ image.y}}, {{ image.x/2 }}))
+
+        {% for point in image.points %}
+        L.marker([{{ point.y}}, {{ point.x}}],  {
+            title: "{{ point.title }}",
+            riseOnHover: true
+        }).addTo(map);
+        {% endfor %}
+
+
+        let pointmap = {}
+        let points = extractPoints({{ plain_contents | json_encode | raw}});
+        for (let i  in points) {
+            let point = points[i];
+            let marker = new L.marker(
+                point.latlng,
+                {
+                    riseOnHover: true
+                }
+            );
+            marker.bindTooltip(point.title);
+            marker.addTo(map);
+            marker.on('click', function (){
+                $("[data-key]").each(function (i,e){
+                    let key = $(e).attr('data-key');
+                    if(key === point.orignalText){
+                        $([document.documentElement, document.body]).animate({
+                            scrollTop:  $(e).offset().top
+                        }, 300);
+                        $(e).removeClass('pulse')
+                        $(e).addClass('pulse')
+                    }
+
+
+
+                })
+
+
+
+            });
+            pointmap[point.orignalText] = marker;
+        }
+
+
+        map.on('click', onMapClick);
+
+        $(function () {
+            $('.map-view-button').click(function (){
+                let key = $(this).attr('data-key');
+                console.log(key)
+                console.log(pointmap[key]);
+                var popup = L.popup({
+                    autoPanPadding: L.point(30,30)
+                })
+                    .setLatLng(pointmap[key].getLatLng())
+                    .setContent($(this).html())
+                    .openOn(map);
+                $([document.documentElement, document.body]).animate({
+                    scrollTop: $("#mapid").offset().top
+                }, 300);
+
+            });
+        });
+
+
+    </script>
+    <style>
+        #mapid { height: 580px; }
+
+        .pulse {
+
+            animation: pulse 0.5s 3;
+        }
+
+        @-webkit-keyframes pulse {
+            0% {
+                -webkit-box-shadow: 0 0 0 0 rgba(255,0,0, 0.4);
+            }
+            70% {
+                -webkit-box-shadow: 0 0 0 10px rgba(255,0,0, 0);
+            }
+            100% {
+                -webkit-box-shadow: 0 0 0 0 rgba(255,0,0, 0);
+            }
+        }
+        @keyframes pulse {
+            0% {
+                -moz-box-shadow: 0 0 0 0 rgba(255,0,0, 0.4);
+                box-shadow: 0 0 0 0 rgba(255,0,0, 0.4);
+            }
+            70% {
+                -moz-box-shadow: 0 0 0 10px rgba(255,0,0, 0);
+                box-shadow: 0 0 0 10px rgba(255,0,0, 0);
+            }
+            100% {
+                -moz-box-shadow: 0 0 0 0 rgba(255,0,0, 0);
+                box-shadow: 0 0 0 0 rgba(255,0,0, 0);
+            }
+        }
+
+    </style>
+
+

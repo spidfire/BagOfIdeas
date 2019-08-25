@@ -1,0 +1,5 @@
+/storage/
+/vendor/
+/propel/
+/config.php
+.idea/

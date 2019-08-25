@@ -1,0 +1,47 @@
+{% extends 'base.twig' %}
+{% block content %}
+
+    <div class="col-12">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+
+                <a href="{{ EXT_ROOT }}wiki/">Back</a>
+                <h2>Content</h2>
+                <a href="{{ EXT_ROOT }}wiki/{{ id }}/edit">Edit</a>
+
+
+            {% if image is defined  %}
+
+                    {% include 'mapView.twig' %}
+                </div>
+                <div class="card-body">
+            {% endif %}
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                   <div class="col">
+
+
+                       <div>
+                           {{ contents | raw }}
+
+                       </div>
+                       <span class="float-right font-weight-light">
+
+                       Updated at: {{ updated }} Created at: {{ created }}
+                       </span>
+
+                   </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+{% endblock %}

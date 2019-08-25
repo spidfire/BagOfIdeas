@@ -1,0 +1,8 @@
+<?php
+
+
+define("EXT_ROOT", 'http://127.0.0.1/bagofideas/');
+define("MYSQL_HOSTNAME", 'localhost');
+define("MYSQL_DATABASE", '');
+define("MYSQL_USERNAME", '');
+define("MYSQL_PASSWORD", '');

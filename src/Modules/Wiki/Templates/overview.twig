@@ -1,0 +1,41 @@
+{% extends 'base.twig' %}
+{% block content %}
+
+    {% macro gameHierarchy(input) %}
+        <ul>
+            {% for folder in input.children %}
+
+                <li>{{ folder.name | default("Uncategorized") }}</li>
+                {{ _self.gameHierarchy(folder) }}
+            {% endfor %}
+
+
+            {% for item in input.items %}
+                <li><a href="{{ item.link }}">{{ item.title }}</a></li>
+            {% endfor %}
+
+        </ul>
+
+
+    {% endmacro %}
+
+
+    <div class="row">
+        <div class="col-8">
+            {{ _self.gameHierarchy(hierarchy) }}
+
+        </div>
+        <div class="col-4">
+            <h2>Last changes</h2>
+            <ul>
+                {% for change in last_changes %}
+                    <li><a href="{{ change.link }}">{{ change.title }}</a></li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
+
+
+
+{% endblock %}

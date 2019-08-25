@@ -1,0 +1,126 @@
+<script>
+    function extractPoints(contents) {
+        var out = [];
+        let reg = /<<(.*?)>>/g;
+        let array = [...contents.matchAll(reg)];
+        for (let i  in array) {
+            let parts = array[i][1].split('|');
+            out.push({
+                orignalText: array[i][0],
+                points: {
+                    x: parts[0],
+                    y: parts[1]
+                },
+                title: parts[2],
+                latlng: coordToLatLgn(parts[0], parts[1])
+            })
+        }
+        return out;
+
+
+    }
+
+
+    function renderPointsFromText() {
+        for (let i in markers) {
+            markers[i].remove()
+        }
+        markers = [];
+        let $contents = $('#contents');
+        let contents = $contents.val();
+        let points = extractPoints(contents);
+        for (let i  in points) {
+            let point = points[i]
+            marker = new L.marker(
+                point.latlng,
+                {
+                    draggable: 'true',
+                    riseOnHover: true
+                }
+            );
+            marker.bindTooltip(point.title)
+            marker.on('dragend', function (event) {
+                var marker = event.target;
+                var position = latLgnToCoord(marker.getLatLng());
+
+                let changeMe = $contents.val();
+
+                let replaceContent = '<<' + position.x + '|' + position.y + '|' + point.title + '>>\n';
+
+                let result = changeMe.replace(point.orignalText, replaceContent);
+                $contents.val(result);
+                renderPointsFromText();
+
+
+            });
+            marker.on('click', function (event) {
+                let selectionStart = $contents.val().indexOf(point.orignalText);
+                document.getElementById('contents').focus();
+                document.getElementById('contents').setSelectionRange(selectionStart, selectionStart + point.orignalText.length);
+
+            });
+            map.addLayer(marker);
+            markers.push(marker)
+
+        }
+
+
+    }
+
+    function selectRange(element, start, end) {
+        if (end === undefined) {
+            end = start;
+        }
+        return element.each(function () {
+            if ('selectionStart' in element) {
+                element.selectionStart = start;
+                element.selectionEnd = end;
+            } else if (element.setSelectionRange) {
+                element.setSelectionRange(start, end);
+            } else if (element.createTextRange) {
+                var range = element.createTextRange();
+                range.collapse(true);
+                range.moveEnd('character', end);
+                range.moveStart('character', start);
+                range.select();
+            }
+        });
+    }
+
+    function latLgnToCoord(latlng) {
+        return {
+            x: latlng.lng / {{ image.x }},
+            y: latlng.lat / {{ image.y }}
+        }
+
+    }
+
+    function coordToLatLgn(x, y) {
+        return {
+            lat: y * {{ image.y }},
+            lng: x * {{ image.x }}
+
+        }
+    }
+
+
+    function onMapClick(e) {
+        console.log(e.latlng);
+        let point = latLgnToCoord(e.latlng);
+
+        let $contents = $('#contents');
+        let cursorPos = $contents.prop('selectionStart');
+        let v = '<<' + point.x + '|' + point.y + '|New point>>\n';
+        let textBefore = $contents.val().substring(0, cursorPos);
+        let textAfter = $contents.val().substring(cursorPos);
+
+        $contents.val(textBefore + v + textAfter);
+
+        document.getElementById('contents').focus();
+        document.getElementById('contents').setSelectionRange(textBefore.length, textBefore.length + v.length);
+
+        renderPointsFromText();
+    };
+
+
+</script>

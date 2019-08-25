@@ -1,0 +1,60 @@
+<div class="row no-gutters align-items-center">
+    <div class="col">
+        <a href="{{ EXT_ROOT }}wiki/">Back</a>
+        <div id="mapid"></div>
+    </div>
+
+</div>
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin=""/>
+
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+        integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+        crossorigin=""></script>
+
+{% include 'mapJavascript.twig' %}
+
+<script>
+    var map = L.map('mapid', {
+        zoomDelta: 0.25,
+        wheelPxPerZoomLevel: 100,
+        zoomSnap: 0
+    }).setView([{{ image.y / 2 }}, 0], 4);
+    var imageUrl = '{{ image.url }}',
+        imageBounds = [[0, 0], [{{ image.y }}, {{ image.x }}]];
+    L.imageOverlay(imageUrl, imageBounds).addTo(map);
+
+    map.panTo(new L.LatLng({{ image.y }}, {{ image.x/2 }}))
+
+
+    map.on('click', onMapClick);
+
+
+    var markers = [];
+
+
+    $(function (){
+        $('#contents').keyup(function (){
+            console.log("key up")
+            renderPointsFromText();
+
+
+        });
+        renderPointsFromText()
+
+
+    })
+
+</script>
+<style>
+    #mapid {
+        height: 580px;
+    }
+
+</style>
+
+

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" defaultPhpNamingMethod="phpname" namespace='BagOfIdeas\Models\Wiki' package='Wiki' identifierQuoting='true'>
+    <table name="wiki">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true" />
+        <column name="title" type="VARCHAR" required="true" />
+        <column name="path" type="VARCHAR" required="true" />
+        <column name="image" type="VARCHAR" required="false" />
+        <column name="content" type="LONGVARCHAR" />
+        <column name="user_id" type="INTEGER" />
+        <foreign-key foreignTable="user">
+            <reference local="user_id" foreign="id" />
+        </foreign-key>
+
+        <behavior name="versionable" />
+        <behavior name="timestampable" />
+    </table>
+</database>

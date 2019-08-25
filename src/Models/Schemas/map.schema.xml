@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" defaultPhpNamingMethod="phpname" namespace='BagOfIdeas\Models\Map' package='Map' identifierQuoting='true'>
+    <table name="map_point">
+        <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true" />
+        <column name="title" type="VARCHAR" required="true" />
+        <column name="position" type="VARCHAR" required="true" />
+        <column name="parent_wiki_id" type="INTEGER" required="true" />
+        <column name="target_wiki_id" type="INTEGER" required="false" />
+        <column name="user_id" type="INTEGER" />
+        <foreign-key foreignTable="wiki"  phpname="ParentWiki">
+            <reference local="parent_wiki_id" foreign="id" />
+        </foreign-key>
+        <foreign-key foreignTable="wiki" phpname="TargetWiki">
+            <reference local="target_wiki_id" foreign="id" />
+        </foreign-key>
+        <foreign-key foreignTable="user">
+            <reference local="user_id" foreign="id" />
+        </foreign-key>
+
+        <behavior name="versionable" />
+        <behavior name="timestampable" />
+    </table>
+</database>

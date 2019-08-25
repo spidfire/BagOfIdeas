@@ -1,0 +1,51 @@
+{% extends 'base.twig' %}
+{% block content %}
+
+    <div class="col-12">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                   <div class="col">
+                       <a href="{{ EXT_ROOT }}wiki/{{ id }}">Back</a>
+                       <h2>Content</h2>
+                       {% if image is defined  %}
+
+                       {% include 'mapEdit.twig' %}
+                        {% endif %}
+
+
+                       <form method="POST">
+                           <div class="form-group">
+                               <label>Enter a title</label>
+                               <input type="title" class="form-control" name="title"  placeholder="Enter a title" value="{{ form.Title }}">
+                           </div>
+                           <div class="form-group">
+                               <label>Enter a path</label>
+                               <input type="path" class="form-control" name="path"  placeholder="Enter a path" value="{{ form.Path }}">
+                           </div>
+                           <div class="form-group">
+                               <label>Enter a path</label>
+                               <textarea id="contents" type="content" style="height: 400px" name="content"  class="form-control"  placeholder="Enter a path">{{ form.Content }}</textarea>
+                           </div>
+                        <input type="submit" class="btn btn-primary" name="submit" value="Save" />
+
+                       </form>
+
+
+
+
+                   </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+{% endblock %}

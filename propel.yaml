@@ -1,0 +1,28 @@
+propel:
+  database:
+    connections:
+      default:
+        adapter: mysql
+        classname: Propel\Runtime\Connection\ConnectionWrapper
+        dsn: "mysql:host=%env.propel_hostname%;dbname=%env.propel_database%;charset=utf8"
+        user: "%env.propel_user%"
+        password: "%env.propel_password%"
+        attributes:
+        settings:
+          charset: utf8mb4
+  runtime:
+    defaultConnection: default
+    connections:
+      - default
+  generator:
+    defaultConnection: default
+    namespaceAutoPackage: false
+    connections:
+      - default
+  paths:
+    outputDir: propel
+    phpDir: src/Models
+    phpConfDir: propel/generated-conf
+    migrationDir: propel/generated-migrations
+    sqlDir: propel/generated-sql
+    schemaDir: src/Models/Schemas
