@@ -7,7 +7,8 @@
         "propel/propel": "~2.0@dev",
         "twig/twig": "^2.11",
         "filp/whoops": "^2.4",
-        "ext-gd": "*"
+        "ext-gd": "*",
+        "delight-im/auth": "^8.1"
     },
 
     "autoload": {

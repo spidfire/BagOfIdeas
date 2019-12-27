@@ -1,4 +1,4 @@
-#BagOfIdeas
+# BagOfIdeas
 
 
 This tool is written to run a West marches style D&D campaign but it can be used for everything.

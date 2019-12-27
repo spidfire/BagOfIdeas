@@ -14,11 +14,22 @@
                         {% endif %}
 
 
-                       <form method="POST">
+                       <form method="POST"  enctype="multipart/form-data">
                            <div class="form-group">
                                <label>Enter a title</label>
                                <input type="title" class="form-control" name="title"  placeholder="Enter a title" value="{{ form.Title }}">
                            </div>
+                           {% if image is defined  %}
+                           <div class="form-group">
+                               <label>REMOVE THE IMAGE</label>
+                               <input type="checkbox"  name="remove_file" >
+                           </div>
+                           {% else %}
+                           <div class="form-group">
+                               <label>Attach image</label>
+                               <input type="file" class="form-control"  name="file" id="fileToUpload">
+                           </div>
+                           {% endif %}
                            <div class="form-group">
                                <label>Enter a path</label>
                                <input type="path" class="form-control" name="path"  placeholder="Enter a path" value="{{ form.Path }}">
